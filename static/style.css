@@ -1,0 +1,15 @@
+.container {
+    display: grid;
+}
+
+.button {
+    background-color: white;
+    text-decoration: none;
+    font-style: normal;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 10px;
+    color: black;
+}
+a:hover, a:active {
+  background-color: grey;
+}
