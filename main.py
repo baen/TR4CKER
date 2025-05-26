@@ -12,4 +12,12 @@ def Intermediary():
 def Home():
     return render_template("home.html")
 
+@app.route("/login")
+def Login():
+    return render_template("login.html")
+
+@app.route("/register")
+def Register():
+    return render_template("register.html")
+
 app.run(debug=True, port=5000)
