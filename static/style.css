@@ -1,0 +1,43 @@
+.container {
+    display: grid;
+    grid-template-areas: 
+    'b1' 'b2';
+    grid-template-columns: 1fr 1fr;
+}
+
+.welcome{
+    text-align: center;
+    margin: 5%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+
+.button {
+    background-color: white;
+    text-decoration: none;
+    font-style: normal;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: black;
+    border-style: ridge;
+    border-color: black;
+    text-align: center;
+    margin-left: 20%;
+    margin-right: 20%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+
+a:hover, a:active {
+  background-color: grey;
+}
+
+.topnav{
+  overflow: hidden;
+  background-color: #333;
+  position: relative;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 10px;
+    color: black;
+}
+a:hover, a:active {
+  background-color: grey;
+}
