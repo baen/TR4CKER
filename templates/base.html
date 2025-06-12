@@ -9,21 +9,25 @@
 
     <title>TR4CKER</title>
 
-    <link rel="stylesheet" href="static/css/style.css" />
+    <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
     <header>
-        <h1 class="banner">Timeline</h1>
+        <h1 class="banner">TR4CKER</h1>
     </header>
     
     <div class="topnav">
+                <ul>
+                    <li><a href="/login" class="sidebarbutton">Login</a></li>
+                <p></p>
+                    <li><a href="/register" class="sidebarbutton">Register</a></li>
+                <p></p>    
+                    <li><a href="/logout" class="sidebarbutton">Logout</a></li>
+                <p></p>
+                    <li><a href="/add" class="sidebarbutton">Add Exercise</a></li>
+                </ul>           
 
-                    <a href="/login" class="sidebarbutton">Login</a>
-                    <a href="/register" class="sidebarbutton">Register</a>
-
-                    <a href="/logout" class="sidebarbutton">Logout</a>
-                    <a href="/add" class="sidebarbutton">New Review</a>
-    </div>
+                </div>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
