@@ -34,7 +34,8 @@ a:link {
 
 a:hover, a:active {
   background-color: white;
-  padding: 9px;
+  padding: fill;
+  background-color: grey;
 }
 
 
@@ -48,6 +49,9 @@ a:hover, a:active {
   font-family: 'Courier New', Courier, monospace;
   padding: 10px;
   text-align: center;
+  border: 1px;
+  border-color: black;
+  border-style: solid;
 }
 
 ul{
