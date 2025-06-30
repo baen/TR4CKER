@@ -8,6 +8,7 @@ app.secret_key = "gtg"
 
 @app.route("/login")
 def Login():
+    return render_template("login.html")
 
 @app.route("/")
 def Intermediary():
