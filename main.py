@@ -4,6 +4,11 @@ import db
 app = Flask(__name__)
 app.secret_key = "gtg"
 
+
+
+@app.route("/login")
+def Login():
+
 @app.route("/")
 def Intermediary():
     return render_template("firstpg.html")
@@ -11,10 +16,6 @@ def Intermediary():
 @app.route("/home")
 def Home():
     return render_template("home.html")
-
-@app.route("/login")
-def Login():
-    return render_template("login.html")
 
 @app.route("/register")
 def Register():
