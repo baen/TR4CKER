@@ -2,34 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <!-- This line blocks cross site scripting -->
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
-
     <title>TR4CKER</title>
-
-    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <header>
-        <h1 class="banner">TR4CKER</h1>
-    </header>
-    
-    <div class="topnav">
-                <ul>
-                    <li><a href="/login" class="sidebarbutton">Login</a></li>
-                <p></p>
-                    <li><a href="/register" class="sidebarbutton">Register</a></li>
-                <p></p>    
-                    <li><a href="/logout" class="sidebarbutton">Logout</a></li>
-                <p></p>
-                    <li><a href="/add" class="sidebarbutton">Add Exercise</a></li>
-                <p></p>
-                    <li><a href="/firstpg" class="sidebarbutton">Clear Workout</a></li>
-                </ul>           
+    <div class="page-wrapper">
+        <!-- Sidebar navigation -->
+        <nav class="sidebar">
+            <a href="/list">Add Exercise</a>
+            <a href="#">Finish Workout</a>
+            <a href="/logout">Logout</a>
+        </nav>
 
-                </div>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+        <!-- Page content -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
 </body>
 </html>
