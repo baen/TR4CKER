@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Register - TR4CKER</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
     <div class="form-container">
         <h2>Register New Account</h2>
         <form method="POST">
@@ -19,5 +14,4 @@
         </form>
         <p>Did you mean <a href="/login">login</a>?</p>
     </div>
-</body>
-</html>
+{% endblock %}
