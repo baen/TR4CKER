@@ -16,20 +16,18 @@ def Login():
         
     if session.get('username') != None:
         return redirect("/")
-    # They sent us data, get the username and password
-    # then check if their details are correct.
+
     if request.method == "POST":
         username = request.form['username']
         password = request.form['password']
 
-        # Did they provide good details
+
         user = db.CheckLogin(username, password)
         if user:
-            # Yes! Save their username and id then
+
             session['id'] = user['id']
             session['username'] = user['username']
 
-            # Send them back to the homepage
             return redirect("/")
 
     return render_template("login.html")
@@ -44,14 +42,11 @@ def Register():
     if session.get('username') != None:
         return redirect("/")
     
-    # If they click the submit button, let's register
     if request.method == "POST":
         username = request.form['username']
         password = request.form['password']
 
-        # Try and add them to the DB
         if db.RegisterUser(username, password):
-            # Success! Let's go to the homepage
             return redirect("/")
 
     return render_template("register.html")
