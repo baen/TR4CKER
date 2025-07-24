@@ -9,50 +9,62 @@ app.secret_key = "gtg"
 
 @app.route("/")
 def index():
+
+    if session.get('username') != None:
+        return redirect("/home")
+    
     return render_template("firstpg.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def Login():
         
     if session.get('username') != None:
-        return redirect("/")
+        return redirect("/home")
 
     if request.method == "POST":
         username = request.form['username']
         password = request.form['password']
 
-
         user = db.CheckLogin(username, password)
+        
         if user:
 
             session['id'] = user['id']
             session['username'] = user['username']
 
-            return redirect("/")
+            return redirect("/home")
 
     return render_template("login.html")
 
 @app.route("/home")
 def Home():
+    
+    if session.get('username') == None:
+        return redirect("/")
+    
     return render_template("home.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def Register():
     
     if session.get('username') != None:
-        return redirect("/")
+        return redirect("/home")
     
     if request.method == "POST":
         username = request.form['username']
         password = request.form['password']
 
         if db.RegisterUser(username, password):
-            return redirect("/")
+            return redirect("/home")
 
     return render_template("register.html")
 
-@app.route("/list")
+@app.route("/list", methods=["GET", "POST"])
 def ExerciseList():
+    
+    if session.get('username') == None:
+        return redirect("/")
+    
     return render_template("list.html")
 
 @app.route("/logout")
