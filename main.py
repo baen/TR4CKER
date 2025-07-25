@@ -36,13 +36,21 @@ def Login():
 
     return render_template("login.html")
 
-@app.route("/home")
+@app.route("/home", methods=["GET", "POST"])
 def Home():
     
     if session.get('username') == None:
         return redirect("/")
-    
-    return render_template("home.html")
+
+    conn = sqlite3.connect('.database/exerciselist.db')
+
+    currentworkout = db.GetCurrentWorkout
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM Exerciseslist')
+    conn.close()
+
+    return render_template("home.html", Exerciseslist=currentworkout())
 
 @app.route("/register", methods=["GET", "POST"])
 def Register():
@@ -64,6 +72,14 @@ def ExerciseList():
     
     if session.get('username') == None:
         return redirect("/")
+    
+    if request.method == "POST":
+        exercisename = request.form['exercisename']
+        reps = request.form['reps']
+        sets = request.form['sets']
+        weight = request.form['weight']
+
+        db.addExercises(exercisename, reps, sets, weight)
     
     return render_template("list.html")
 

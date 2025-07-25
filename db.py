@@ -30,3 +30,24 @@ def CheckLogin(username, password):
             return user
         
     return None
+
+def addExercises(exercisename, reps, sets, weight):
+
+    if exercisename is None or reps is None or sets is None:
+        return False
+    
+    db = GetDB()
+    db.execute("INSERT INTO Exerciseslist(exercisename, reps, sets, weight) VALUES (?, ?, ?, ?)",
+               (exercisename, reps, sets, weight))
+    db.commit()
+
+    return True
+
+def GetCurrentWorkout():
+    db = GetDB()
+    currentworkout = db.execute("""SELECT Exerciseslist.exercisename, Exerciseslist.reps, Exerciseslist.sets,
+                                    Exerciseslist.weight
+                             FROM Exerciseslist
+                             ORDER BY id DESC""").fetchall()
+    db.close()
+    return currentworkout
