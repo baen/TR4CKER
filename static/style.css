@@ -50,6 +50,34 @@ html, body {
     overflow-y: auto;
 }
 
+/* Success Message - Green Line with Text */
+.success-message {
+    position: relative;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8fff8;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid #e8f5e9;
+}
+
+.success-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #4CAF50; /* Green color */
+    display: block;
+}
+
+.success-message p {
+    color: #2e7d32;
+    font-weight: bold;
+    margin: 0;
+    font-size: 16px;
+}
+
 /* Workout Cards */
 .exercise-card {
     background-color: white;
@@ -60,6 +88,7 @@ html, body {
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .exercise-header {
@@ -67,19 +96,20 @@ html, body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
 }
 
 .remove-btn {
-    color: red;
+    color: #e74c3c;
     text-decoration: none;
     font-size: 0.9rem;
+    font-weight: bold;
 }
 
-.rest-timer {
-    display: block;
-    margin-top: 0.5rem;
-    color: darkgray;
-    text-decoration: none;
+.remove-btn:hover {
+    color: #c0392b;
+    text-decoration: underline;
 }
 
 /* Exercise List Page */
@@ -132,11 +162,13 @@ html, body {
 
 h2 {
     margin-bottom: 1rem;
+    color: #333;
 }
 
 p {
     margin-top: 1rem;
     font-size: 0.9rem;
+    color: #666;
 }
 
 input[type="text"], input[type="password"], input[type="number"] {
@@ -158,10 +190,87 @@ button, .button {
     cursor: pointer;
     display: inline-block;
     margin-top: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+
+button:hover, .button:hover {
+    background-color: #555;
 }
 
 .btn-group {
     display: flex;
     justify-content: space-around;
     margin-top: 1.5rem;
+}
+
+/* Rest Timer Section */
+.rest-timer-section {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.rest-timer-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.rest-timer-label {
+    font-weight: bold;
+    color: #333;
+    font-size: 1rem;
+}
+
+.start-rest-timer {
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.start-rest-timer:hover:not(:disabled) {
+    background-color: #45a049;
+}
+
+.start-rest-timer:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.start-rest-timer.timer-running {
+    background-color: #ff9800;
+}
+
+.timer-display {
+    margin-top: 0.5rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+    min-height: 1.5rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.timer-display.timer-active {
+    color: #e74c3c;
+    background-color: #fdf2f2;
+}
+
+.timer-display.timer-complete {
+    color: #27ae60;
+    background-color: #f2fdf2;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
 }

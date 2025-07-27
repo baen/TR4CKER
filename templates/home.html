@@ -12,21 +12,62 @@
                         
                         <div class="exercise-header">
                             <strong>{{ exercise.exercisename }}</strong>
-                            <a href="/logout" class="remove-btn">Remove Exercise</a>
+                            <a href="{{ url_for('delete_exercise', id=exercise.id) }}" class="remove-btn">Remove Exercise</a>
                         </div>
                         {% for i in range(1, 4) %}
                             <p>Set {{ i }} – {{ exercise.reps or "# reps" }}</p>
                         {% endfor %}
-                        <a href="#" class="rest-timer">Start rest timer</a>
+                        <div class="rest-timer-section">
+                            <div class="rest-timer-info">
+                                <span class="rest-timer-label">Rest: {{ exercise.rest_timer }} seconds</span>
+                                <button class="start-rest-timer" data-time="{{ exercise.rest_timer }}">Start Timer</button>
+                            </div>
+                            <div class="timer-display" id="timer-{{ exercise.id }}"></div>
+                        </div>
                     
                     </div>
                 
-                    {% endfor %}
+        {% endfor %}
 
-                    {% else %}
+    {% else %}
                 
-                    <p>No exercises selected. Choose one <a href="/list">here</a>.</p>
+        <p>No exercises selected. Choose one <a href="{{ url_for('ExerciseList') }}">here</a>.</p>
 
     {% endif %}
+
+<script>
+    // JavaScript for the rest timers
+    document.querySelectorAll('.start-rest-timer').forEach(button => {
+        button.addEventListener('click', function () {
+            const restTime = parseInt(this.getAttribute('data-time'));
+            const exerciseCard = this.closest('.exercise-card');
+            const timerDisplay = exerciseCard.querySelector('.timer-display');
+            let remainingTime = restTime;
+            
+            // Disable button during countdown
+            this.disabled = true;
+            this.textContent = 'Timer Running...';
+            this.classList.add('timer-running');
+
+            let timerInterval = setInterval(function () {
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = 'Rest Complete!';
+                    timerDisplay.classList.add('timer-complete');
+                    button.disabled = false;
+                    button.textContent = 'Start Timer';
+                    button.classList.remove('timer-running');
+                    
+                    // Optional: Play sound or show notification
+                    // You can add audio notification here if desired
+                } else {
+                    timerDisplay.textContent = `Rest: ${remainingTime} seconds`;
+                    timerDisplay.classList.add('timer-active');
+                    remainingTime--;
+                }
+            }, 1000);
+        });
+    });
+</script>
 
 {% endblock %}
