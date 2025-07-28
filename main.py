@@ -36,7 +36,6 @@ def Home():
     if session.get('username') == None:
         return redirect("/")
 
-    # Use the existing database function
     exercises = db.GetCurrentWorkout()
     
     return render_template("home.html", Exerciseslist=exercises)
