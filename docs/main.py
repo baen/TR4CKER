@@ -11,7 +11,7 @@ def index():
     if session.get('username') != None:
         return redirect("/home")
     
-    return render_template("firstpg.html")
+    return render_template("index.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def Login():
