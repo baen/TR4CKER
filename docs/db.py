@@ -2,7 +2,7 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 
 def GetDB():
-    db = sqlite3.connect(".database/exerciselist.db")
+    db = sqlite3.connect("docs/.database/exerciselist.db")
     db.row_factory = sqlite3.Row
     return db
 
@@ -40,7 +40,7 @@ def addExercises(exercisename, reps, sets, weight, rest_timer=60):
         return False
     
     try:
-        # Convert parameters to appropriate types
+
         reps = int(reps) if reps is not None else 0
         sets = int(sets) if sets is not None else 0
         weight = float(weight) if weight is not None and weight != '' else 0
@@ -77,4 +77,16 @@ def DeleteExercise(id):
         return True
     except Exception as e:
         print(f"Error deleting exercise: {e}")
+        return False
+    
+def ClearAllExercises():
+    try:
+        db = GetDB()
+        db.execute('DELETE FROM Exerciseslist')
+        db.commit()
+        db.close()
+        return True
+    
+    except Exception as e:
+        print(f"Error clearing all exercises: {e}")
         return False

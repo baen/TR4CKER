@@ -7,15 +7,16 @@
 </head>
 <body>
     <div class="page-wrapper">
-
+        {% if not hide_sidebar %}
         <nav class="sidebar">
             <a href="/home">Home Page</a>
             <a href="/list">Add Exercise</a>
-            <a href="#">Finish Workout</a>
+            <a href="/finish_workout" onclick="return confirm('Are you sure you want to finish this workout? This will clear all exercises.')">Finish Workout</a>
             <a href="/logout">Logout</a>
         </nav>
+        {% endif %}
 
-        <main class="main-content">
+        <main class="{% if hide_sidebar %}main-content full-width{% else %}main-content{% endif %}">
             {% block content %}{% endblock %}
         </main>
     </div>

@@ -1,50 +1,62 @@
 {% extends "base.html" %}
 
+{% set hide_sidebar = False %}
+
 {% block content %}
 
 <h2>Current Workout</h2>
 
-    {% if Exerciseslist %}
-
-        {% for exercise in Exerciseslist %}
-                
-                    <div class="exercise-card">
-                        
-                        <div class="exercise-header">
-                            <strong>{{ exercise.exercisename }}</strong>
-                            <a href="{{ url_for('delete_exercise', id=exercise.id) }}" class="remove-btn">Remove Exercise</a>
-                        </div>
-                        {% for i in range(1, 4) %}
-                            <p>Set {{ i }} – {{ exercise.reps or "# reps" }}</p>
-                        {% endfor %}
-                        <div class="rest-timer-section">
-                            <div class="rest-timer-info">
-                                <span class="rest-timer-label">Rest: {{ exercise.rest_timer }} seconds</span>
-                                <button class="start-rest-timer" data-time="{{ exercise.rest_timer }}">Start Timer</button>
-                            </div>
-                            <div class="timer-display" id="timer-{{ exercise.id }}"></div>
-                        </div>
-                    
-                    </div>
-                
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            {% if category == 'workout_complete' %}
+                <div class="workout-complete-message">
+                    <div class="success-line"></div>
+                    <h3>🎉 Workout Complete! 🎉</h3>
+                    <p>Well done! Great job on your workout today.</p>
+                </div>
+            {% endif %}
         {% endfor %}
-
-    {% else %}
-                
-        <p>No exercises selected. Choose one <a href="{{ url_for('ExerciseList') }}">here</a>.</p>
-
     {% endif %}
+{% endwith %}
+
+{% if Exerciseslist %}
+    {% for exercise in Exerciseslist %}
+        <div class="exercise-card">
+            <div class="exercise-header">
+                <strong>{{ exercise.exercisename }}</strong>
+                <a href="{{ url_for('delete_exercise', id=exercise.id) }}" class="remove-btn">Remove Exercise</a>
+            </div>
+
+            {% for i in range(1, 4) %}
+                <div class="set-row">
+                    <input type="checkbox" id="set-{{ exercise.id }}-{{ i }}" class="set-checkbox" data-exercise="{{ exercise.id }}" data-set="{{ i }}">
+                    <label for="set-{{ exercise.id }}-{{ i }}" class="set-label">Set {{ i }} – {{ exercise.reps or "# reps" }}</label>
+                </div>
+            {% endfor %}
+            
+            <div class="rest-timer-section">
+                <div class="rest-timer-info">
+                    <span class="rest-timer-label">Rest: {{ exercise.rest_timer }} seconds</span>
+                    <button class="start-rest-timer" data-time="{{ exercise.rest_timer }}">Start Timer</button>
+                </div>
+                <div class="timer-display" id="timer-{{ exercise.id }}"></div>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No exercises selected. Choose one <a href="{{ url_for('ExerciseList') }}">here</a>.</p>
+{% endif %}
 
 <script>
-    // JavaScript for the rest timers
+
     document.querySelectorAll('.start-rest-timer').forEach(button => {
         button.addEventListener('click', function () {
             const restTime = parseInt(this.getAttribute('data-time'));
             const exerciseCard = this.closest('.exercise-card');
             const timerDisplay = exerciseCard.querySelector('.timer-display');
             let remainingTime = restTime;
-            
-            // Disable button during countdown
+
             this.disabled = true;
             this.textContent = 'Timer Running...';
             this.classList.add('timer-running');
@@ -57,15 +69,24 @@
                     button.disabled = false;
                     button.textContent = 'Start Timer';
                     button.classList.remove('timer-running');
-                    
-                    // Optional: Play sound or show notification
-                    // You can add audio notification here if desired
                 } else {
                     timerDisplay.textContent = `Rest: ${remainingTime} seconds`;
                     timerDisplay.classList.add('timer-active');
                     remainingTime--;
                 }
             }, 1000);
+        });
+    });
+
+    document.querySelectorAll('.set-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                this.nextElementSibling.style.textDecoration = 'line-through';
+                this.nextElementSibling.style.color = '#666';
+            } else {
+                this.nextElementSibling.style.textDecoration = 'none';
+                this.nextElementSibling.style.color = '';
+            }
         });
     });
 </script>

@@ -50,7 +50,24 @@ def Register():
         password = request.form['password']
 
         if db.RegisterUser(username, password):
-            return redirect("/home")
+            try:
+                db_conn = db.GetDB()
+                user = db_conn.execute("SELECT id, username FROM Users WHERE username=? COLLATE NOCASE", (username,)).fetchone()
+                db_conn.close()
+                
+                if user:
+                    session['id'] = user['id']
+                    session['username'] = user['username']
+                    flash('Registration successful! Welcome to TR4CKER.', 'success')
+                    return redirect("/home")
+            except Exception as e:
+                print(f"Error logging in after registration: {e}")
+                pass
+
+            flash('Registration successful! Please log in.', 'success')
+            return redirect("/login")
+        else:
+            flash('Registration failed. Username may already exist.', 'error')
 
     return render_template("register.html")
 
@@ -66,13 +83,11 @@ def ExerciseList():
             sets = request.form.get('sets')
             weight = request.form.get('weight', 0)
             rest_timer = request.form.get('rest_timer', 60)
-            
-            # Validate required fields
+
             if not all([exercisename, reps, sets, rest_timer]):
                 flash('Please fill in all required fields.', 'error')
                 return redirect("/list")
-            
-            # Convert to appropriate types
+
             reps = int(reps)
             sets = int(sets)
             weight = float(weight) if weight else 0
@@ -106,5 +121,18 @@ def Logout():
     session.clear()
     return redirect("/")
 
+@app.route('/finish_workout')
+def finish_workout():
+    if session.get('username') == None:
+        return redirect("/")
+    
+    # Clear all exercises from the database using db function
+    if db.ClearAllExercises():
+        flash('🎉 Workout Complete! Well done! Great job on your workout today.', 'workout_complete')
+    else:
+        flash('Workout completed, but there was an issue clearing exercises.', 'workout_complete')
+    
+    return redirect('/home')
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=False, port=5000)

@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
+{% set hide_sidebar = False %}
+
 {% block content %}
 <h2>Exercise List</h2>
 
-<!-- Success message -->
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}
@@ -18,11 +19,20 @@
 {% endwith %}
 
 <form method="POST">
-    {% for exercise in ["Bench Press", "Deadlift", "Squat", "Situps", "Bicep Curl", "Pullups", "Pushups", "Dips"] %}
-        <div class="exercise-entry">
-            <button type="submit" name="exercisename" value="{{ exercise }}">{{ exercise }}</button>
+    <div class="exercise-selection">
+        <label for="exercisename">Select or Search Exercise:</label>
+        <div class="searchable-select">
+            <input type="text" id="exercisename-search" class="search-input" placeholder="Type to search exercises..." autocomplete="off">
+            <input type="hidden" name="exercisename" id="exercisename" required>
+            <div class="select-dropdown">
+                <div class="select-options">
+                    {% for exercise in ["Bench Press", "Deadlift", "Squat", "Situps", "Bicep Curl", "Pullups", "Pushups", "Dips"] %}
+                        <div class="select-option" data-value="{{ exercise }}">{{ exercise }}</div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-    {% endfor %}
+    </div>
 
     <div class="details-input">
         <label>Reps:</label>
@@ -31,6 +41,92 @@
         <input type="number" name="sets" min="1" required>
         <label>Weight (kg):</label>
         <input type="number" name="weight" step="0.5" min="0">
+
+        <label>Rest Timer (seconds):</label>
+        <select name="rest_timer" required>
+            <option value="30">30 seconds</option>
+            <option value="60" selected>60 seconds</option>
+            <option value="90">90 seconds</option>
+            <option value="120">120 seconds</option>
+            <option value="180">180 seconds</option>
+        </select>
+    </div>
+    
+    <div class="submit-section">
+        <button type="submit" class="add-exercise-btn">Add Exercise</button>
     </div>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('exercisename-search');
+        const hiddenInput = document.getElementById('exercisename');
+        const dropdown = document.querySelector('.select-dropdown');
+        const options = document.querySelectorAll('.select-option');
+        const selectOptions = document.querySelector('.select-options');
+
+        searchInput.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('show');
+            if (dropdown.classList.contains('show')) {
+                searchInput.focus();
+            }
+        });
+
+        document.addEventListener('click', function() {
+            dropdown.classList.remove('show');
+        });
+
+        dropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        options.forEach(option => {
+            option.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                searchInput.value = value;
+                hiddenInput.value = value;
+                dropdown.classList.remove('show');
+                searchInput.focus();
+            });
+        });
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            let hasVisibleOptions = false;
+            
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    option.style.display = 'block';
+                    hasVisibleOptions = true;
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+
+            if (searchTerm.length > 0 || dropdown.classList.contains('show')) {
+                dropdown.classList.add('show');
+            }
+        });
+
+        searchInput.addEventListener('keydown', function(e) {
+            const visibleOptions = Array.from(options).filter(option => option.style.display !== 'none');
+            
+            if (e.key === 'Enter' && visibleOptions.length > 0) {
+                e.preventDefault();
+                const firstVisible = visibleOptions[0];
+                const value = firstVisible.getAttribute('data-value');
+                searchInput.value = value;
+                hiddenInput.value = value;
+                dropdown.classList.remove('show');
+            } else if (e.key === 'Escape') {
+                dropdown.classList.remove('show');
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                dropdown.classList.add('show');
+            }
+        });
+    });
+</script>
 {% endblock %}
