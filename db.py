@@ -2,7 +2,7 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 
 def GetDB():
-    db = sqlite3.connect("docs/.database/exerciselist.db")
+    db = sqlite3.connect(".database/exerciselist.db")
     db.row_factory = sqlite3.Row
     return db
 
